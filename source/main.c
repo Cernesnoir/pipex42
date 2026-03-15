@@ -6,7 +6,7 @@
 /*   By: anmuller <anmuller@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/21 16:40:14 by anmuller          #+#    #+#             */
-/*   Updated: 2026/03/12 10:26:18 by anmuller         ###   ########.fr       */
+/*   Updated: 2026/03/15 12:57:04 by anmuller         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,16 @@ void	cmd2(int fd_arr[], int fd_files[], char **argv, char **envp)
 	char	**args_split;
 
 	close_fd(fd_arr[1], fd_files[0]);
-	args_split = ft_split(argv[3], ' ');
+	if (!argv[3][0])
+		error_perso("Command not found", 127, fd_arr[0], fd_files[1]);
+	args_split = split_pipex(argv[3], ' ');
 	if (!args_split)
 		close_fd_cmd(fd_arr[0], fd_files[1], "cmd2");
 	str = search_cmd(args_split[0], envp);
 	if (!str)
 	{
 		free_arr(args_split);
-		close_fd_cmd(fd_arr[0], fd_files[1], "cmd2");
+		close_fd_cmd(fd_arr[0], fd_files[1], "cmd inexistante");
 	}
 	dup2(fd_arr[0], STDIN_FILENO);
 	dup2(fd_files[1], STDOUT_FILENO);
@@ -40,14 +42,16 @@ void	cmd1(int fd_arr[], int fd_files[], char **argv, char **envp)
 	char	**args_split;
 
 	close_fd(fd_arr[0], fd_files[1]);
-	args_split = ft_split(argv[2], ' ');
+	if (!argv[2][0])
+		error_perso("Command not found", 127, fd_arr[1], fd_files[0]);
+	args_split = split_pipex(argv[2], ' ');
 	if (!args_split)
-		close_fd_cmd(fd_arr[0], fd_files[0], "cmd1");
+		close_fd_cmd(fd_arr[1], fd_files[0], "cmd1");
 	str = search_cmd(args_split[0], envp);
 	if (!str)
 	{
 		free_arr(args_split);
-		close_fd_cmd(fd_arr[0], fd_files[0], "cmd1");
+		close_fd_cmd(fd_arr[0], fd_files[0], "cmd inexistante");
 	}
 	dup2(fd_arr[1], STDOUT_FILENO);
 	dup2(fd_files[0], STDIN_FILENO);

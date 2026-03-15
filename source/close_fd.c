@@ -6,7 +6,7 @@
 /*   By: anmuller <anmuller@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 11:57:59 by anmuller          #+#    #+#             */
-/*   Updated: 2026/03/11 18:29:48 by anmuller         ###   ########.fr       */
+/*   Updated: 2026/03/14 23:34:23 by anmuller         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,12 @@ int	close_all_fd(int fd_arr[2], int fd_files[2], const char *str)
 void	close_fd_cmd(int fd_1, int fd_2, char *name_proc)
 {
 	close_fd(fd_1, fd_2);
+	if (ft_strncmp(name_proc, "cmd inexistante", 15) == 0)
+		exit(127);
 	if (ft_strncmp(name_proc, "cmd2", 4) == 0)
 		exit(127);
 	else if (ft_strncmp(name_proc, "cmd1", 4) == 0)
-		exit(0);
+		exit(127);
 }
 
 int	close_fd(int fd_1, int fd_2)

@@ -6,15 +6,24 @@
 /*   By: anmuller <anmuller@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 21:37:29 by anmuller          #+#    #+#             */
-/*   Updated: 2026/03/12 09:35:11 by anmuller         ###   ########.fr       */
+/*   Updated: 2026/03/14 23:28:10 by anmuller         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
+void	error_perso(const char *str, int num, int fd1, int fd2)
+{
+	ft_printf("%s\n", str);
+	close_fd(fd1, fd2);
+	exit(num);
+}
+
 int	error(const char *str)
 {
 	perror(str);
+	if (ft_strncmp(str, "fork", 4) == 0 || ft_strncmp(str, "pipe", 4) == 0)
+		exit(1);
 	exit(EXIT_FAILURE);
 	return (1);
 }
@@ -32,7 +41,7 @@ void	error_execve(char **args_split, char *str, char *name_proc)
 	free_arr(args_split);
 	free(str);
 	if (ft_strncmp(name_proc, "cmd2", 4) == 0)
-		exit(EXIT_FAILURE);
+		exit(126);
 	else if (ft_strncmp(name_proc, "cmd1", 4) == 0)
-		exit(EXIT_FAILURE);
+		exit(126);
 }

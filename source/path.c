@@ -6,7 +6,7 @@
 /*   By: anmuller <anmuller@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 10:47:41 by anmuller          #+#    #+#             */
-/*   Updated: 2026/03/12 08:59:37 by anmuller         ###   ########.fr       */
+/*   Updated: 2026/03/14 23:42:00 by anmuller         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ char	*loop_paths(char **paths, char *cmd, int i)
 	char	*res;
 	char	*temp;
 
+	if (access(cmd, F_OK) == 0)
+		return (cmd);
 	while (paths[i])
 	{
 		temp = ft_strjoin(paths[i], "/");
@@ -51,6 +53,12 @@ char	*loop_paths(char **paths, char *cmd, int i)
 	return (NULL);
 }
 
+char	*cmd_not_found(char *cmd)
+{
+	ft_printf("%s: command not found\n", cmd);
+	return (NULL);
+}
+
 char	*search_cmd(char *cmd, char **envp)
 {
 	int		i;
@@ -66,14 +74,11 @@ char	*search_cmd(char *cmd, char **envp)
 		return (NULL);
 	i = 0;
 	res = loop_paths(paths, cmd, i);
-	if (!res || access(res, X_OK) == 0)
+	if (!res || (access(res, X_OK) == 0))
 	{
 		free_arr(paths);
 		if (!res)
-		{
-			ft_printf("%s: command not found\n", cmd);
-			return (NULL);
-		}
+			cmd_not_found(cmd);
 		return (res);
 	}
 	free_arr(paths);
