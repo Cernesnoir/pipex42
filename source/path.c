@@ -6,7 +6,7 @@
 /*   By: anmuller <anmuller@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 10:47:41 by anmuller          #+#    #+#             */
-/*   Updated: 2026/03/14 23:42:00 by anmuller         ###   ########.fr       */
+/*   Updated: 2026/03/15 14:26:45 by anmuller         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,20 @@ char	*path(char **envp)
 	return (NULL);
 }
 
+int	is_path(char *cmd)
+{
+	if (!ft_strchr(cmd, '/'))
+		return (0);
+	else
+		return (1);
+}
+
 char	*loop_paths(char **paths, char *cmd, int i)
 {
 	char	*res;
 	char	*temp;
 
-	if (access(cmd, F_OK) == 0)
+	if (is_path(cmd) == 1 && access(cmd, F_OK) == 0)
 		return (cmd);
 	while (paths[i])
 	{
